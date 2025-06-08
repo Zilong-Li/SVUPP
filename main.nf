@@ -3,26 +3,7 @@
 nextflow.enable.dsl=2
 
 include { QUILT2_PREPARE_RDATA } from './subworkflows/quilt2_prepare/main'
-
-
-
-
-// params.input = 'samplesheet.csv'
-
-// // Parse sample sheet
-// Channel
-//     .fromPath(params.input)
-//     .splitCsv(header: true)
-//     .map { row -> 
-//         def sample = [id: row.sample, single_end: false]
-//         def bams = [file(row.bam, checkIfExists: true)]
-//         def bais = [file(row.bai, checkIfExists: true)]
-//         tuple(sample, bams, bais)
-//     }
-//     .unique { it -> it[0].id }  // Remove duplicates based on meta.id
-//     .set { ch_samples }
-
-
+include { QUILT2_RUN } from './subworkflows/quilt2_run/main'
 
 // Set default if not provided
 params.outdir = params.outdir ?: 'results'
@@ -33,22 +14,32 @@ params.mincm = params.mincm ?: 4
 
 workflow {
 
-    // Parse reference sheet
-    Channel
-        .fromPath(params.refpanel)
-        .splitCsv(header: true)
-        .map { row ->
-            def meta = [id: row.chrom]
-            def gmap = file(row.genetic_map, checkIfExists: true)
-            tuple(meta, row.chrom, gmap, row.vcf, row.vcf_index, row.genetic_map)
-        }
-        .unique { it -> it[0].id }  // Remove duplicates based on meta.id
-        .set { ch_refpanel }
+    def refdata = params.refdata
+    
+    if (params.refpanel) {
+        // Parse reference sheet
+        ch_refpanel = Channel
+            .fromPath(params.refpanel, checkIfExists: true)
+            .splitCsv(header: true)
+            .map { row ->
+                [
+                    [id: row.chrom],
+                    row.chrom,
+                    file(row.genetic_map, checkIfExists: true),
+                    file(row.vcf, checkIfExists: true),
+                    file(row.vcf_index, checkIfExists: true),
+                    row.genetic_map
+                ]
+            }
+            .unique { it[0].id }
 
-    Channel
-        .of([params.minbp, params.mincm])
-        .set { ch_params }
+        ch_params = Channel.of([params.minbp, params.mincm])
 
-    QUILT2_PREPARE_RDATA(ch_refpanel.combine(ch_params))
+        QUILT2_PREPARE_RDATA(ch_refpanel.combine(ch_params))
+        refdata = QUILT2_PREPARE_RDATA.out.csv
+    }
+
+    QUILT2_RUN(params.samples, refdata)
+
 }
 
