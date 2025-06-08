@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: "QUILT2_PREPARE_RDATA"
+description: QUILT2 prepare reference panel in RData file by auto splitting the genomic regions
+keywords:
+  - split
+  - chunk
+  - imputation
+  - reference-panel
+components:
+  - quilt2/chunk
+  - quilt2/prepare_refpanel
+input:
+  - ch_refpanel:
+      description: |
+        The input channel of this subworkflow containing:
+        - meta: Groovy Map containing reference information => e.g. chrom
+        - gmap: path of the genetic map file used by QUILT2
+        - vcf: path of phased VCF file for the reference haplotyps
+        - vcf_index: index of path of phased VCF file
+        - gmap: instead of being file path, this is the raw value of the genetic map file
+        - minbp: Minimun chunk size in base pair unit
+        - mincm: Minimun chunk size in cm unit
+        Structure: [val(meta), chrom, gmap_path, vcf, vcf_index, gmap_val, minbp, mincm]
+output:
+  - refdata:
+      description: |
+        a CSV file with two columns and a header "chunk_id,refpanel_rdata"
+        Structure: [ path(prepared_reference_rdata.csv) ]
+  - versions:
+      description: |
+        Files containing software versions
+        Structure: [ path(versions.yml) ]
+authors:
+  - "@Zilong-Li"
+maintainers:
+  - "@Zilong-Li"
