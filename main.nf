@@ -6,12 +6,6 @@ include { QUILT2_PREPARE_RDATA } from './subworkflows/quilt2_prepare/main'
 include { QUILT2_RUN } from './subworkflows/quilt2_run/main'
 include { CUTESV2_RUN } from './subworkflows/cutesv2_run/main'
 
-// Set default if not provided
-params.outdir = params.outdir ?: 'results'
-params.nGen   = params.nGen ?: 100
-params.buffer = params.buffer ?: 500000
-params.minbp  = params.minbp ?: 3000000
-params.mincm  = params.mincm ?: 4
 
 workflow {
 
@@ -42,9 +36,9 @@ workflow {
 
     QUILT2_RUN(params.samples, ch_refdata)
 
-    // def samples = params.samples2 ?: params.samples
-    // labels =  QUILT2_RUN.out.labels
-    // CUTESV2_RUN(samples, labels)
+    def samples = params.samples2 ?: params.samples
+    labels =  QUILT2_RUN.out.labels
+    CUTESV2_RUN(samples, labels)
 
 }
 

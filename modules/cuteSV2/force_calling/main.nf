@@ -25,12 +25,8 @@ process CUTESV2 {
     cuteSV ${bam} ${fasta} ${sample}.vcf . \\
     --sample ${sample} \\
     --threads ${task.cpus} \\
-    --min_support 1 \\
-    --diff_ratio_merging_INS 0.3 \\
-    --max_cluster_bias_DEL 100 \\
-    --diff_ratio_merging_DEL 0.3 \\
     -read_hap1_prob ${labels} \\
-    -Ivcf ${svfile} 
+    -Ivcf ${svfile} \\
     $args
 
     bcftools sort ${sample}.vcf -o ${sample}.vcf.gz
