@@ -18,21 +18,51 @@ process QUILT2_PREPARE_CHUNK {
     task.ext.when == null || task.ext.when
 
     script:
-    // Debug: check what type genetic_map is
-    // println "genetic_map type: ${genetic_map.getClass()}"
-    // def gmappath = file(genetic_map).toAbsolutePath().toString()
     def args                       =   task.ext.args ?: ''
     def prefix                     =   task.ext.prefix ?: "${meta.id}"
     if (!(args ==~ /.*--seed.*/)) {args += " --seed=1"}
 
     """
-    \$(Rscript -e "d=QUILT::quilt_chunk_map('${chr}', '${genetic_map}', ${min_bp}, ${min_cm})[,3];write.table(cbind(do.call(rbind,strsplit(d, '[:|-]')), '${vcfpath}', '${indexpath}', '${gmappath}'), file='${prefix}.csv', sep=',', col.names=c('chrom', 'start', 'end', 'refpanel_vcf', 'refpanel_vcf_index', 'genetic_map'),row.names=FALSE,quote=FALSE)")
+
+    Rscript -e "
+    library(QUILT)
     
+    # Generate chunk map
+    chunk_map <- quilt_chunk_map('${chr}', '${genetic_map}', ${min_bp}, ${min_cm})
+    
+    # Extract and parse chunk information
+    chunks <- chunk_map[, 3]
+    chunk_parts <- do.call(rbind, strsplit(chunks, '[:|-]'))
+    
+    # Create output data frame
+    output_df <- data.frame(
+        chrom = chunk_parts[, 1],
+        start = chunk_parts[, 2], 
+        end = chunk_parts[, 3],
+        refpanel_vcf = '${vcfpath}',
+        refpanel_vcf_index = '${indexpath}',
+        genetic_map = '${gmappath}',
+        stringsAsFactors = FALSE
+    )
+    
+    # Write to CSV
+    write.table(
+        output_df,
+        file = '${prefix}.csv',
+        sep = ',',
+        col.names = TRUE,
+        row.names = FALSE,
+        quote = FALSE
+    )
+    "
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         r-base: \$(Rscript -e "cat(strsplit(R.version[['version.string']], ' ')[[1]][3])")
-        r-quilt2: \$(Rscript -e "cat(as.character(utils::packageVersion(\\"QUILT\\")))")
+        r-quilt2: \$(Rscript -e "cat(as.character(utils::packageVersion('QUILT')))")
     END_VERSIONS
     """
 }
+
+
 

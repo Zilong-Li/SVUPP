@@ -16,7 +16,7 @@ process QUILT2_IMPUTE {
     output:
     tuple val(meta), path("${meta.id}/*.vcf.gz"),              emit: vcf
     tuple val(meta), path("${meta.id}/*.vcf.gz.tbi"),          emit: tbi,   optional:true
-    tuple val(meta), path("${meta.id}/RData/*.RData"),         emit: rdata, optional:true
+    tuple val(meta), path("${meta.id}/RData/*.RData"),         emit: rdata
     tuple val(meta), path("${meta.id}/plots/*"),               emit: plots, optional:true
     path "versions.yml",                                       emit: versions
 
@@ -49,13 +49,14 @@ process QUILT2_IMPUTE {
         --nCores=$task.cpus \\
         --outputdir=${meta.id} \\
         --prepared_reference_filename=$refdata \\
+        --output_read_label_prob=TRUE \\
         $args
 
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         r-base: \$(Rscript -e "cat(strsplit(R.version[['version.string']], ' ')[[1]][3])")
-        r-quilt2: \$(Rscript -e "cat(as.character(utils::packageVersion(\\"QUILT\\")))")
+        r-quilt2: \$(Rscript -e "cat(as.character(utils::packageVersion('QUILT')))")
     END_VERSIONS
     """
 }
