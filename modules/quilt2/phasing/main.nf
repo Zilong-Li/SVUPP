@@ -1,5 +1,4 @@
-
-process QUILT2_HAPLOTAG {
+process QUILT2_PHASE {
     tag "$meta.id"
     label 'process_low'
 
@@ -12,8 +11,9 @@ process QUILT2_HAPLOTAG {
     tuple val(meta), path(vcfs), path(rdata)
 
     output:
-    tuple val(meta), path("${meta.id}/*.haptag.tsv"),          emit: labels
-    path "versions.yml",                                       emit: versions
+    tuple val(meta), path("${meta.id}/*.haptag.tsv"),                                emit: labels
+    tuple path("${meta.id}/ligate.vcf.gz"), path("${meta.id}/ligate.vcf.gz.tbi"),    emit: vcf
+    path "versions.yml",                                                             emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -21,13 +21,16 @@ process QUILT2_HAPLOTAG {
     script:
     def args                        =   task.ext.args ?: ''
     def prefix                      =   task.ext.prefix ?: "${meta.id}"
-    if (!(args ==~ /.*--seed.*/)) {args += " --seed=101"}
 
     """
-    ls -1v $rdata > all_files.txt
-    ls -1v $vcfs > all_vcfs.txt
-    bcftools query -l ${vcfs[0]} > samples.txt 
     mkdir -p ${meta.id}
+    bcftools query -l ${vcfs[0]} > samples.txt 
+    ls -1v $vcfs > all_vcfs.txt
+    cat all_vcfs.txt | xargs -I vcf tabix vcf
+    bcftools concat --ligate -f all_vcfs.txt -o ${meta.id}/ligate.vcf.gz
+    tabix ${meta.id}/ligate.vcf.gz
+    
+    ls -1v $rdata > all_files.txt
 
     Rscript -e "
     parse_phase <- function(rda){

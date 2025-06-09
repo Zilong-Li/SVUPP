@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 include { QUILT2_IMPUTE } from '../../modules/quilt2/impute/main'
-include { QUILT2_HAPLOTAG } from '../../modules/quilt2/haplotag/main'
+include { QUILT2_PHASE } from '../../modules/quilt2/phasing/main'
 
 
 workflow QUILT2_RUN {
@@ -48,11 +48,11 @@ workflow QUILT2_RUN {
             vcf_list.size() > 0 && rda_list.size() > 0 
         }
     
-    QUILT2_HAPLOTAG(ch_impute)
+    QUILT2_PHASE(ch_impute)
     
     // save the paths in a CSV
     def outdir = params.outdir ?: 'results'
-    ch_labels = QUILT2_HAPLOTAG.out.labels
+    ch_labels = QUILT2_PHASE.out.labels
         .flatMap { meta, files ->
             files.collect { tsv ->
                 def bn = tsv.baseName.tokenize('.')

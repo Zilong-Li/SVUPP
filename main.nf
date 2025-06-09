@@ -42,9 +42,9 @@ workflow {
 
     QUILT2_RUN(params.samples, ch_refdata)
 
-    def samples = params.samples2 ?: params.samples
-    labels =  QUILT2_RUN.out.labels
-    CUTESV2_RUN(samples, labels)
+    // def samples = params.samples2 ?: params.samples
+    // labels =  QUILT2_RUN.out.labels
+    // CUTESV2_RUN(samples, labels)
 
 }
 
