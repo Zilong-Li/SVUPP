@@ -1,11 +1,8 @@
-#+title: SVUPP: Improving Structural Variants Genotyping Using Pre-Phasing
+#+title: SVUPP: Structural Variants Genotyping Using Pre-Phased Reads
 #+author: Zilong Li
 #+language: en
 
-* Plans
-
-- [ ] build docker or singularity container for Zilong-Li:cuteSV2/svupp 
-- [ ] write a nextflow workflow 
+- [ ] build docker or singularity container
 
 
 

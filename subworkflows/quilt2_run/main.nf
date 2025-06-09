@@ -7,14 +7,13 @@ include { QUILT2_HAPLOTAG } from '../../modules/quilt2/haplotag/main'
 workflow QUILT2_RUN {
 
     take:
-    csv_samples   // channel: path(csv)
-    csv_chunks    // channel: path(csv)
+    samples_csv      // csv file
+    ch_refdata_csv   // channel: path(csv)
     
     main:
 
     // Parse the chunks
-    ch_chunks = Channel
-        .fromPath(csv_chunks)
+    ch_chunks = ch_refdata_csv
         .splitCsv(header: true)
         .map { row ->
             tuple(row.chunk_id, row.refpanel_rdata)
@@ -24,7 +23,7 @@ workflow QUILT2_RUN {
     
     // Parse sample sheet
     ch_samples = Channel
-        .fromPath(csv_samples)
+        .fromPath(samples_csv)
         .splitCsv(header: true)
         .map { row -> 
             def batch = [id: row.batch]
@@ -50,11 +49,28 @@ workflow QUILT2_RUN {
         }
     
     QUILT2_HAPLOTAG(ch_impute)
-    ch_labels    = QUILT2_HAPLOTAG.out.labels
+    
+    // save the paths in a CSV
+    def outdir = params.outdir ?: 'results'
+    ch_labels = QUILT2_HAPLOTAG.out.labels
+        .flatMap { meta, files ->
+            files.collect { tsv ->
+                def bn = tsv.baseName.tokenize('.')
+                tuple(bn[0], tsv)
+            }
+        }
+        .map { id, tsv -> "${id},${tsv}" }
+        .collectFile(
+            name: 'samples-labels.csv',
+            seed: 'sample,label',
+            newLine: true,
+            storeDir: outdir,
+            sort: false
+        )
 
     emit:
     vcf      = ch_vcf      // channel: [ val(meta), path(vcf) ]
-    labels   = ch_labels   // channel: [ val(meta), path(ch_labels) ]
+    labels   = ch_labels   // channel: [ path(ch_labels) ]
     versions = ch_versions // channel: [ path(versions.yml) ]
 
 }

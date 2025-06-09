@@ -2,10 +2,10 @@ process QUILT2_PREPARE_CHUNK {
     tag "$meta.id"
     label 'process_low'
 
-    conda "${moduleDir}/environment.yml"
+    conda "${moduleDir}/environment.yaml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/r-quilt:2.0.1--r44h503566f_1':
-        'biocontainers/r-quilt:2.0.1--r44h503566f_1' }"
+        'https://depot.galaxyproject.org/singularity/r-quilt:2.0.2--r44h503566f_0':
+        'biocontainers/r-quilt:2.0.2--r44h503566f_0' }"
 
     input:
     tuple val(meta), val(chr), path(genetic_map), val(vcfpath), val(indexpath), val(gmappath), val(min_bp), val(min_cm)

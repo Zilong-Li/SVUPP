@@ -3,10 +3,10 @@ process QUILT2_HAPLOTAG {
     tag "$meta.id"
     label 'process_low'
 
-    conda "${moduleDir}/environment.yml"
+    conda "${moduleDir}/environment.yaml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/r-quilt:2.0.1--r44h503566f_1':
-        'biocontainers/r-quilt:2.0.1--r44h503566f_1' }"
+        'https://depot.galaxyproject.org/singularity/r-quilt:2.0.2--r44h503566f_0':
+        'biocontainers/r-quilt:2.0.2--r44h503566f_0' }"
 
     input:
     tuple val(meta), path(vcfs), path(rdata)
@@ -25,6 +25,8 @@ process QUILT2_HAPLOTAG {
 
     """
     ls -1v $rdata > all_files.txt
+    ls -1v $vcfs > all_vcfs.txt
+    bcftools query -l ${vcfs[0]} > samples.txt 
     mkdir -p ${meta.id}
 
     Rscript -e "
@@ -34,8 +36,8 @@ process QUILT2_HAPLOTAG {
     }
     labels <- lapply(readLines('all_files.txt'), parse_phase)
     res <- lapply(seq_along(labels[[1]]), function(i) {do.call(rbind, lapply(labels, \\`[[\\`, i))})
-    names(res) <- names(labels[[1]])
-    lapply(names(res), function(n) write.table(res[[n]], file = paste0(${meta.id},'/',n,'.haptag.tsv'), quote=FALSE, col.names=FALSE, row.names=F))
+    names(res) <- readLines('samples.txt')
+    lapply(names(res), function(n) write.table(res[[n]], file = paste0('${meta.id}/',n,'.haptag.tsv'), quote=FALSE, col.names=FALSE, row.names=F))
     "
 
     cat <<-END_VERSIONS > versions.yml

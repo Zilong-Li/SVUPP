@@ -3,10 +3,10 @@ process QUILT2_IMPUTE {
     tag "$meta.id"
     label 'process_medium'
 
-    conda "${moduleDir}/environment.yml"
+    conda "${moduleDir}/environment.yaml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/r-quilt:2.0.1--r44h503566f_1':
-        'biocontainers/r-quilt:2.0.1--r44h503566f_1' }"
+        'https://depot.galaxyproject.org/singularity/r-quilt:2.0.2--r44h503566f_0':
+        'biocontainers/r-quilt:2.0.2--r44h503566f_0' }"
 
     input:
     tuple val(meta), path(bams), path(bais), val(fasta), val(chunkid), path(refdata)

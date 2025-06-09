@@ -1,0 +1,2 @@
+sample,bam,bai,fasta
+NA12878,/home/zilong/.tmp/datahub/bams/NA12878.1.0X.bam,/home/zilong/.tmp/datahub/bams/NA12878.1.0X.bam.csi,/home/zilong/.tmp/datahub/reference/human_GRCh38_no_alt_analysis_set.fasta
