@@ -11,7 +11,11 @@ git clone https://github.com/Zilong-Li/SVUPP
 cd SVUPP
 
 # Run after preparing the sample sheet and reference panel
-nextflow run main.nf -profile conda --refpanel tests/refpanel.csv --samples tests/samples.csv 
+nextflow run main.nf \
+         -profile conda \                 # or docker/singularity
+         --refpanel tests/refpanel.csv \  # for phased reference panel
+         --samples tests/samples.csv \    # samplesheet with long reads
+         --svfile /path/to/vcf/with/svs   # for SV genotyping
 
 # Output Structure
 results
@@ -38,6 +42,56 @@ results
 # Read the nextflow.config about advanced and Customization parameters
 #+end_src
 
-* TODO
+* Quick Guide to [[https://www.nextflow.io/docs/latest/install.html][Nextflow]]
+
+
+| Functionality                | Nextflow Command  | Important Note                          |
+|------------------------------+-------------------+-----------------------------------------|
+| Run job in the background    | run -bg           | DO NOT use nohup or &                   |
+| Resume from the cached tasks | run -resume       | Can combine with specific hash          |
+| Cache directory              | run -w/--work-dir | Defaults 'work'                         |
+| Output directory             | run -o/--our-dir  | Precede the configuration file          |
+| Logging history              | log               | Find the status/identifier of past runs |
+
+* Q&A
+
+** What if I already have the prepared reference panel, i.e the RData, from QUILT?
+
+1. Prepare a sheet with two columns named 'chunk_id' and 'refpanel_rdata', e.g.
+    #+begin_src shell
+chunk_id,refpanel_rdata
+chr22.48718618.55783303,/home/zilong/Projects/SVUPP/work/f2/f9b51191685bdf2fa893e394a834af/RData/QUILT_prepared_reference.chr22.48718618.55783303.RData
+chr22.38068017.44734586,/home/zilong/Projects/SVUPP/work/9b/6e3c921ecb41b2ebe01c8f0d4935ab/RData/QUILT_prepared_reference.chr22.38068017.44734586.RData
+chr22.30094765.34092463,/home/zilong/Projects/SVUPP/work/89/b4676a75daf1e493c82e90d8bf1bdd/RData/QUILT_prepared_reference.chr22.30094765.34092463.RData
+chr22.18150679.22149505,/home/zilong/Projects/SVUPP/work/8d/e642c4d7d2c6f1ed3c65c3869088d3/RData/QUILT_prepared_reference.chr22.18150679.22149505.RData
+#+end_src
+2. Run the nextflow
+   #+begin_src shell
+nextflow run main.nf \
+         -profile conda \                 # or docker/singularity
+         --refdata prepared_reference_rdata.csv \  # the sheet with prepared RData for reference panel
+         --samples tests/samples.csv \    # samplesheet with long reads
+         --svfile /path/to/vcf/with/svs   # for SV genotyping
+#+end_src
+
+** What if I already have read labels either from QUILT or other read phasing program ?
+
+1. Prepare a sheet with two columns named 'sample' and 'label', e.g.
+   #+begin_src shell
+sample,label
+NA12877,/home/zilong/Projects/SVUPP/work/6c/f6daadafa1fdf4e90c6c8de4c39181/1/NA12877.haptag.tsv
+NA12878,/home/zilong/Projects/SVUPP/work/6c/f6daadafa1fdf4e90c6c8de4c39181/1/NA12878.haptag.tsv
+#+end_src
+2. Run the nextflow
+   #+begin_src shell
+   nextflow run main.nf \
+            -profile conda \                 # or docker/singularity
+            --read_labels samples_read_labels.csv \  # the sheet associate each sample with its read label file 
+            --samples tests/samples.csv \    # samplesheet with long reads
+            --svfile /path/to/vcf/with/svs   # for SV genotyping
+#+end_src
+
+
+* TODO PLANS
 - [ ] build and upload docker and singularity container
 
