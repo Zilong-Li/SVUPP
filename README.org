@@ -101,4 +101,5 @@ The label column stores the path to a space-separated file with no header and th
 
 * TODO FUTURE PLANS
 - [ ] build and upload docker and singularity container
+- [ ] Evaluation
 

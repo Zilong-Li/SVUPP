@@ -9,7 +9,7 @@ process QUILT2_IMPUTE {
         'biocontainers/r-quilt:2.0.2--r44h503566f_0' }"
 
     input:
-    tuple val(meta), path(bams), path(bais), val(fasta), val(chunkid), path(refdata)
+    tuple val(meta), path(bams), path(bais), val(fastas), val(chunkid), path(refdata)
     val(nGen)
     val(buffer)
 
@@ -28,6 +28,7 @@ process QUILT2_IMPUTE {
     def prefix                      =   task.ext.prefix ?: "${meta.id}"
     def (chr, start, end)           =   chunkid.split('\\.')
 
+    def fasta                       =   fastas.flatten().unique()
     def extensions                  =   bams.collect { it.extension }
     def extension                   =   extensions.flatten().unique()
     def list_command                =   extension == ["bam"]  ? "--bamlist="                       :
