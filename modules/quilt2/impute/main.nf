@@ -32,16 +32,15 @@ process QUILT2_IMPUTE {
     def extensions                  =   bams.collect { it.extension }
     def extension                   =   extensions.flatten().unique()
     def list_command                =   extension == ["bam"]  ? "--bamlist="                       :
-                                        extension == ["cram"] ? "--reference=${fasta} --cramlist=" : ""
+                                        extension == ["cram"] ? "--reference=${fasta[0]} --cramlist=" : ""
     if (!(args ==~ /.*--seed.*/)) {args += " --seed=101"}
 
     """
     printf "%s\\n" $bams | tr -d '[],' > all_files.txt
-    BAM_LIST="all_files.txt"
     mkdir -p ${meta.id}/RData
     mkdir -p ${meta.id}/plots
     QUILT2.R \\
-        ${list_command}\$BAM_LIST \\
+        ${list_command}all_files.txt \\
         --chr=$chr \\
         --regionStart=$start \\
         --regionEnd=$end \\
