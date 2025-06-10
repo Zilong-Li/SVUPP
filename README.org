@@ -37,7 +37,7 @@ results
 ├── quilt2_prepare_reference
 │   ├── RData
 │   └── versions.yml
-└── samples-labels.csv
+└── samples_read_labels.csv
 
 # Read the nextflow.config about advanced and Customization parameters
 #+end_src
@@ -82,16 +82,23 @@ sample,label
 NA12877,/home/zilong/Projects/SVUPP/work/6c/f6daadafa1fdf4e90c6c8de4c39181/1/NA12877.haptag.tsv
 NA12878,/home/zilong/Projects/SVUPP/work/6c/f6daadafa1fdf4e90c6c8de4c39181/1/NA12878.haptag.tsv
 #+end_src
+
+The label column stores the path to a space-separated file with no header and the first three columns being =qname,phasing_prob,hap=, for example:
+
+| A00217:76:HFLT3DSXX:4:1457:26015:15984 |             0.999 | 1 |
+| A00296:43:HCLHLDSXX:2:2502:19642:31219 |             0.999 | 2 |
+| A00217:76:HFLT3DSXX:1:1336:4616:23359  | 0.500025147658519 | 1 |
+
 2. Run the nextflow
    #+begin_src shell
    nextflow run main.nf \
-            -profile conda \                 # or docker/singularity
-            --read_labels samples_read_labels.csv \  # the sheet associate each sample with its read label file 
-            --samples tests/samples.csv \    # samplesheet with long reads
-            --svfile /path/to/vcf/with/svs   # for SV genotyping
+     -profile conda \                 # or docker/singularity
+     --read_labels samples_read_labels.csv \  # the sheet associate each sample with its read label file 
+     --samples tests/samples.csv \    # samplesheet with long reads
+     --svfile /path/to/vcf/with/svs   # for SV genotyping
 #+end_src
 
 
-* TODO PLANS
+* TODO FUTURE PLANS
 - [ ] build and upload docker and singularity container
 

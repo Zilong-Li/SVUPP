@@ -61,7 +61,7 @@ workflow QUILT2_RUN {
         }
         .map { id, tsv -> "${id},${tsv}" }
         .collectFile(
-            name: 'samples-labels.csv',
+            name: 'samples_read_labels.csv',
             seed: 'sample,label',
             newLine: true,
             storeDir: outdir,
