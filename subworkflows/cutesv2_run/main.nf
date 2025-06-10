@@ -13,7 +13,7 @@ workflow CUTESV2_RUN {
 
     // Parse sample sheet
     ch_samples = Channel
-        .fromPath(samples_csv)
+        .fromPath(samples_csv, checkIfExists: true)
         .splitCsv(header: true)
         .map { row -> 
             def bam = file(row.bam, checkIfExists: true)

@@ -17,18 +17,15 @@ workflow QUILT2_PREPARE_RDATA {
     def outdir = params.outdir ?: 'results'
 
     QUILT2_PREPARE_CHUNK(ch_refpanel)
-    // ch_csv = QUILT2_PREPARE_CHUNK.out.csv
-    // ch_versions = QUILT2_PREPARE_CHUNK.out.versions
     
-    QUILT2_PREPARE_CHUNK.out.csv
+    ch_chunks = QUILT2_PREPARE_CHUNK.out.csv
         .splitCsv(header: true)
         .map { row ->
             def region = row.chrom + "." + row.start + "." + row.end
             def meta = [id: region]
             tuple(meta, row.chrom, row.start, row.end, row.refpanel_vcf, row.refpanel_vcf_index, row.genetic_map)
         }
-        .unique { it -> it[0].id }  // Remove duplicates based on meta.id
-        .set { ch_chunks }
+        .unique { it[0].id }  // Remove duplicates based on meta.id
     
     QUILT2_PREPARE_REFERENCE(ch_chunks, params.buffer, params.nGen)
     // save the paths in a CSV

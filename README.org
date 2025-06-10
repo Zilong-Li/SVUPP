@@ -2,7 +2,42 @@
 #+author: Zilong Li
 #+language: en
 
-- [ ] build docker or singularity container
 
+* Quick Start
 
+#+begin_src shell
+# Download
+git clone https://github.com/Zilong-Li/SVUPP
+cd SVUPP
+
+# Run after preparing the sample sheet and reference panel
+nextflow run main.nf -profile conda --refpanel tests/refpanel.csv --samples tests/samples.csv 
+
+# Output Structure
+results
+├── cutesv2
+│   ├── NA12878.vcf.gz
+│   ├── NA12878.vcf.gz.tbi
+│   └── versions.yml
+├── prepared_reference_rdata.csv
+├── quilt2_impute
+│   ├── 1
+│   └── versions.yml
+├── quilt2_phase
+│   ├── 1
+│   └── versions.yml
+├── quilt2_prepare_chunk
+│   ├── chr21.csv
+│   ├── chr22.csv
+│   └── versions.yml
+├── quilt2_prepare_reference
+│   ├── RData
+│   └── versions.yml
+└── samples-labels.csv
+
+# Read the nextflow.config about advanced and Customization parameters
+#+end_src
+
+* TODO
+- [ ] build and upload docker and singularity container
 

@@ -20,7 +20,6 @@ process QUILT2_PREPARE_CHUNK {
     script:
     def args                       =   task.ext.args ?: ''
     def prefix                     =   task.ext.prefix ?: "${meta.id}"
-    if (!(args ==~ /.*--seed.*/)) {args += " --seed=1"}
 
     """
 

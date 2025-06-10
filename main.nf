@@ -26,7 +26,7 @@ workflow {
             }
             .unique { it[0].id }
 
-        ch_params = Channel.of([params.minbp, params.mincm])
+        ch_params = Channel.of([params.minbp, params.mincm]) // params for chunking
 
         QUILT2_PREPARE_RDATA(ch_refpanel.combine(ch_params))
         ch_refdata = QUILT2_PREPARE_RDATA.out.csv
@@ -34,11 +34,15 @@ workflow {
         ch_refdata = Channel.fromPath(params.refdata, checkIfExists: true)
     }
 
-    QUILT2_RUN(params.samples, ch_refdata)
-
+    if (params.labels) {
+        ch_labels = Channel.fromPath(params.labels, checkIfExists: true)
+    } else {
+        QUILT2_RUN(params.samples, ch_refdata)
+        ch_labels =  QUILT2_RUN.out.labels
+    }
+    
     def samples = params.samples2 ?: params.samples
-    labels =  QUILT2_RUN.out.labels
-    CUTESV2_RUN(samples, labels)
+    CUTESV2_RUN(samples, ch_labels)
 
 }
 

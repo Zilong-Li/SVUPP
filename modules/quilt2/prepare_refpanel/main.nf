@@ -22,7 +22,6 @@ process QUILT2_PREPARE_REFERENCE {
     script:
     def args                        =   task.ext.args ?: ''
     def _prefix                     =   task.ext.prefix ?: "${meta.id}"
-    if (!(args ==~ /.*--seed.*/)) {args += " --seed=1"}
 
     """
     QUILT2_prepare_reference.R \\
@@ -33,7 +32,8 @@ process QUILT2_PREPARE_REFERENCE {
         --nGen=$nGen \\
         --outputdir="." \\
         --reference_vcf_file=$reference_vcf_file \\
-        --genetic_map_file=${genetic_map_file}
+        --genetic_map_file=${genetic_map_file} \\
+        $args
 
 
     cat <<-END_VERSIONS > versions.yml
