@@ -39,8 +39,12 @@ process QUILT2_IMPUTE {
     printf "%s\\n" $bams | tr -d '[],' > all_files.txt
     mkdir -p ${meta.id}/RData
     mkdir -p ${meta.id}/plots
-    QUILT2.R \\
+    QUILT.R \\
         ${list_command}all_files.txt \\
+        --use_mspbwt=TRUE \\
+        --impute_rare_common=TRUE \\
+        --Ksubset=600 \\
+        --Knew=600 \\
         --chr=$chr \\
         --regionStart=$start \\
         --regionEnd=$end \\
