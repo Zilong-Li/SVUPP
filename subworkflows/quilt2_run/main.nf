@@ -53,11 +53,10 @@ workflow QUILT2_RUN {
     // save the paths in a CSV
     def outdir = params.outdir ?: 'results'
     ch_labels = QUILT2_PHASE.out.labels
-        .flatMap { meta, files ->
-            files.collect { tsv ->
-                def bn = tsv.baseName.tokenize('.')
-                tuple(bn[0], tsv)
-            }
+        .transpose()
+        .map { meta, tsv ->
+            def bn = tsv.baseName.tokenize('.')
+            [bn[0], tsv]
         }
         .map { id, tsv -> "${id},${tsv}" }
         .collectFile(
