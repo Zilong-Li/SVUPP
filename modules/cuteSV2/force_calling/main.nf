@@ -20,8 +20,10 @@ process CUTESV2 {
     script:
     def args                        =   task.ext.args ?: ''
     def prefix                      =   task.ext.prefix ?: ''
+    def fa                          =   ${fasta}.toAbsolutePath()
 
     """
+    ln -s ${fa}.fai .
     cuteSV ${bam} ${fasta} ${sample}.vcf . \\
     --sample ${sample} \\
     --threads ${task.cpus} \\
