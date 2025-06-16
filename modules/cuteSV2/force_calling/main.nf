@@ -6,7 +6,7 @@ process CUTESV2 {
     conda "${moduleDir}/environment.yaml"
 
     input:
-    tuple val(sample), path(bam), path(bai), path(fasta), path(labels)
+    tuple val(sample), path(bam), path(bai), path(fasta), path(fai), path(labels)
     path(svfile)
     
     output:

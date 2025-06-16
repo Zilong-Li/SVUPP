@@ -19,7 +19,8 @@ workflow CUTESV2_RUN {
             def bam = file(row.bam, checkIfExists: true)
             def bai = file(row.bai, checkIfExists: true)
             def fasta = file(row.fasta, checkIfExists: true)
-            tuple(row.sample, bam, bai, fasta)
+            def fai = file(row.fai, checkIfExists: true)
+            tuple(row.sample, bam, bai, fasta, fai)
         }
 
     ch_labels = ch_labels_csv

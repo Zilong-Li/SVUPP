@@ -31,16 +31,17 @@ process QUILT2_IMPUTE {
     def fasta                       =   fastas.flatten().unique()
     def extensions                  =   bams.collect { it.extension }
     def extension                   =   extensions.flatten().unique()
-    def list_command                =   extension == ["bam"]  ? "--bamlist="                       :
-                                        extension == ["cram"] ? "--reference=${fasta[0]} --cramlist=" : ""
+    def list_command                =   extension == ["bam"]  ? "--bamlist="  :
+                                        extension == ["cram"] ? "--cramlist=" : ""
     if (!(args ==~ /.*--seed.*/)) {args += " --seed=101"}
 
     """
-    printf "%s\\n" $bams | tr -d '[],' > all_files.txt
+    printf "%s\\n" $bams | tr -d '[],' > files.txt
     mkdir -p ${meta.id}/RData
     mkdir -p ${meta.id}/plots
     QUILT.R \\
-        ${list_command}all_files.txt \\
+        ${list_command}files.txt \\
+        --reference='${fasta[0]}' \\
         --use_mspbwt=TRUE \\
         --impute_rare_common=TRUE \\
         --Ksubset=600 \\
