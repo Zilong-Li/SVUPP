@@ -18,26 +18,26 @@ nextflow run main.nf \
          --svfile /path/to/vcf/with/svs   # for SV genotyping
 
 # Output Structure
-results
-├── cutesv2
-│   ├── NA12878.vcf.gz
-│   ├── NA12878.vcf.gz.tbi
-│   └── versions.yml
-├── prepared_reference_rdata.csv
-├── quilt2_impute
-│   ├── 1
-│   └── versions.yml
-├── quilt2_phase
-│   ├── 1
-│   └── versions.yml
-├── quilt2_prepare_chunk
-│   ├── chr21.csv
-│   ├── chr22.csv
-│   └── versions.yml
-├── quilt2_prepare_reference
-│   ├── RData
-│   └── versions.yml
-└── samples_read_labels.csv
+# results
+# ├── cutesv2
+# │   ├── NA12878.vcf.gz
+# │   ├── NA12878.vcf.gz.tbi
+# │   └── versions.yml
+# ├── prepared_reference_rdata.csv
+# ├── quilt2_impute
+# │   ├── 1            # batch 1
+# │   └── versions.yml
+# ├── quilt2_phase
+# │   ├── 1            # batch 1
+# │   └── versions.yml
+# ├── quilt2_prepare_chunk
+# │   ├── chr21.csv
+# │   ├── chr22.csv
+# │   └── versions.yml
+# ├── quilt2_prepare_reference
+# │   ├── RData
+# │   └── versions.yml
+# └── samples_read_labels.csv
 
 # Read the nextflow.config about advanced and Customization parameters
 #+end_src
@@ -45,13 +45,13 @@ results
 * Quick Guide to [[https://www.nextflow.io/docs/latest/install.html][Nextflow]]
 
 
-| Functionality                | Nextflow Command  | Important Note                          |
-|------------------------------+-------------------+-----------------------------------------|
-| Run job in the background    | run -bg           | DO NOT use nohup or &                   |
-| Resume from the cached tasks | run -resume       | Can combine with specific hash          |
-| Cache directory              | run -w/--work-dir | Defaults 'work'                         |
-| Output directory             | run -o/--our-dir  | Precede the configuration file          |
-| Logging history              | log               | Find the status/identifier of past runs |
+| Functionality                | Nextflow Command   | Important Note                          |
+|------------------------------+--------------------+-----------------------------------------|
+| Run job in the background    | run -bg            | DO NOT use nohup or &                   |
+| Resume from the cached tasks | run -resume        | Can combine with specific hash          |
+| Cache directory              | run -w/-work-dir   | Defaults 'work'                         |
+| Output directory             | run -o/-output-dir | Precede the configuration file          |
+| Logging history              | log                | Find the status/identifier of past runs |
 
 * Q&A
 
@@ -73,6 +73,10 @@ nextflow run main.nf \
          --samples tests/samples.csv \    # samplesheet with long reads
          --svfile /path/to/vcf/with/svs   # for SV genotyping
 #+end_src
+
+** Speedup QUILT2 for large reference panel
+
+QUILT2 can run much faster if only imputing common variants in a large reference panel where the major SNPs are rare. With that in mind, SVUPP  runs QUILT2 with =--impute_rare_common=FALSE= in default, which disables rare variants imputation. To enable it, the users should modify the =nextflow.config= file adding /quilt_extra_args='--impute_rare_common=TRUE'/.
 
 ** What if I already have read labels either from QUILT or other read phasing program ?
 

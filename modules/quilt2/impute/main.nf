@@ -43,7 +43,7 @@ process QUILT2_IMPUTE {
         ${list_command}files.txt \\
         --reference='${fasta[0]}' \\
         --use_mspbwt=TRUE \\
-        --impute_rare_common=TRUE \\
+        --impute_rare_common=FALSE \\
         --Ksubset=600 \\
         --Knew=600 \\
         --chr=$chr \\

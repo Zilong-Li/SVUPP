@@ -24,15 +24,17 @@ process QUILT2_PREPARE_REFERENCE {
     def _prefix                     =   task.ext.prefix ?: "${meta.id}"
 
     """
-    QUILT2_prepare_reference.R \\
+    QUILT_prepare_reference.R \\
         --chr=$chr \\
         --regionStart=$regions_start \\
         --regionEnd=$regions_end \\
         --buffer=$buffer \\
         --nGen=$nGen \\
-        --outputdir="." \\
         --reference_vcf_file=$reference_vcf_file \\
         --genetic_map_file=${genetic_map_file} \\
+        --outputdir="." \\
+        --use_mspbwt=TRUE \\
+        --impute_rare_common=TRUE \\
         $args
 
 
