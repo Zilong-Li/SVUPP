@@ -4,8 +4,8 @@ process QUILT2_PREPARE_REFERENCE {
 
     conda "${moduleDir}/environment.yaml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/r-quilt:2.0.2--r44h503566f_0':
-        'biocontainers/r-quilt:2.0.2--r44h503566f_0' }"
+        'https://depot.galaxyproject.org/singularity/r-quilt:2.0.4--r44h503566f_0':
+        'biocontainers/r-quilt:2.0.4--r44h503566f_0' }"
 
     input:
     tuple val(meta), val(chr), val(regions_start), val(regions_end),  path(reference_vcf_file), path(reference_vcf_file_index), path(genetic_map_file)

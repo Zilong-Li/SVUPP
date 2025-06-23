@@ -9,7 +9,7 @@ include { QUILT2_PREPARE_REFERENCE } from '../../modules/quilt2/prepare_refpanel
 workflow QUILT2_PREPARE_RDATA {
 
     take:
-    ch_refpanel   // channel: [val(meta), chrom, gmap_path, vcf, vcf_index, gmap_val, minbp, mincm]
+    ch_refpanel   // channel: [val(meta), chrom, gmap_path, vcf, vcf_index, minbp, mincm]
 
     main:
     ch_versions = Channel.empty()
@@ -23,11 +23,16 @@ workflow QUILT2_PREPARE_RDATA {
         .map { row ->
             def region = row.chrom + "." + row.start + "." + row.end
             def meta = [id: region]
-            tuple(meta, row.chrom, row.start, row.end, row.refpanel_vcf, row.refpanel_vcf_index, row.genetic_map)
+            tuple(row.chrom, meta, row.start, row.end)
         }
-        .unique { it[0].id }  // Remove duplicates based on meta.id
-    
-    QUILT2_PREPARE_REFERENCE(ch_chunks, params.buffer, params.nGen)
+        .unique { it[1].id }  // Remove duplicates based on meta.id
+
+    // ch_chunks | view
+    ch_vcf = ch_refpanel.map {v -> [v[1], v[3], v[4], v[2]]}
+
+    ch_input = ch_chunks.combine(ch_vcf, by: 0).map {v -> [v[1], v[0], v[2], v[3], v[4], v[5], v[6]]}
+
+    QUILT2_PREPARE_REFERENCE(ch_input, params.buffer, params.nGen)
     // save the paths in a CSV
     ch_csv = QUILT2_PREPARE_REFERENCE.out.rdata
         .map { meta, rdata -> "${meta.id},${rdata}" }

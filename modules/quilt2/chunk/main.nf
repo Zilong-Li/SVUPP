@@ -4,11 +4,11 @@ process QUILT2_PREPARE_CHUNK {
 
     conda "${moduleDir}/environment.yaml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/r-quilt:2.0.2--r44h503566f_0':
-        'biocontainers/r-quilt:2.0.2--r44h503566f_0' }"
+        'https://depot.galaxyproject.org/singularity/r-quilt:2.0.4--r44h503566f_0':
+        'biocontainers/r-quilt:2.0.4--r44h503566f_0' }"
 
     input:
-    tuple val(meta), val(chr), path(genetic_map), val(vcfpath), val(indexpath), val(gmappath), val(min_bp), val(min_cm)
+    tuple val(meta), val(chr), path(genetic_map), path(vcf), path(vcf_index), val(min_bp), val(min_cm)
 
     output:
     path("*.csv"),                         emit: csv
@@ -38,9 +38,7 @@ process QUILT2_PREPARE_CHUNK {
         chrom = chunk_parts[, 1],
         start = chunk_parts[, 2], 
         end = chunk_parts[, 3],
-        refpanel_vcf = '${vcfpath}',
-        refpanel_vcf_index = '${indexpath}',
-        genetic_map = '${gmappath}',
+        genetic_map = '${genetic_map}',
         stringsAsFactors = FALSE
     )
     

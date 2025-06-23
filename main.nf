@@ -23,8 +23,7 @@ workflow {
                         row.chrom,
                         file(row.genetic_map, checkIfExists: true),
                         file(row.vcf, checkIfExists: true),
-                        file(row.vcf_index, checkIfExists: true),
-                        row.genetic_map
+                        file(row.vcf_index, checkIfExists: true)
                     ]
                 }
                 .unique { it[0].id }

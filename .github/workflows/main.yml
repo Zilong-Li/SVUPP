@@ -32,9 +32,11 @@ jobs:
       - uses: nf-core/setup-nextflow@v2
       - run: nextflow run ${GITHUB_WORKSPACE} -h
 
-      - name: Download data
+      - name: install samtools
         run: |
           sudo apt-get update -y
           sudo apt-get install -qy build-essential samtools
-          bash ./scripts/download-examples.sh
+
+      - name: Download data
+        run: sudo bash ./scripts/download-examples.sh
 
