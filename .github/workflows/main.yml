@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
     branches: [main]
 
@@ -30,7 +30,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - uses: nf-core/setup-nextflow@v2
-      - run: nextflow run ${GITHUB_WORKSPACE}
+      - run: nextflow run ${GITHUB_WORKSPACE} -h
 
       - name: Download data
         run: |
