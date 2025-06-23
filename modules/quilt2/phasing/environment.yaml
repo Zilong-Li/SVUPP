@@ -7,3 +7,5 @@ dependencies:
   - bioconda::r-quilt=2.0.4=r44h503566f_0
   - r-base=4.4.3
   - r-r.utils
+  - tabix
+  - bcftools
