@@ -3,6 +3,7 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - bioconda::r-quilt=2.0.2=r44h503566f_0
+  - bioconda::r-stitch=1.8.4=r44h64f727c_0
+  - bioconda::r-quilt=2.0.4=r44h503566f_0
   - r-base=4.4.3
   - r-r.utils

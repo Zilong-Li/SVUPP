@@ -74,10 +74,6 @@ nextflow run main.nf \
          --svfile /path/to/vcf/with/svs   # for SV genotyping
 #+end_src
 
-** Speedup QUILT2 for large reference panel
-
-QUILT2 can run much faster if only imputing common variants in a large reference panel where the major SNPs are rare. With that in mind, SVUPP  runs QUILT2 with =--impute_rare_common=FALSE= in default, which disables rare variants imputation. To enable it, the users should modify the =nextflow.config= file adding /quilt_extra_args='--impute_rare_common=TRUE'/.
-
 ** What if I already have read labels either from QUILT or other read phasing program ?
 
 1. Prepare a sheet with two columns named 'sample' and 'label', e.g.
@@ -102,6 +98,9 @@ The label column stores the path to a space-separated file with no header and th
      --svfile /path/to/vcf/with/svs   # for SV genotyping
 #+end_src
 
+** Speedup QUILT2 for large reference panel
+
+QUILT2 can run much faster if only imputing common variants in a large reference panel where the major SNPs are rare. With that in mind, SVUPP  runs QUILT2 with =--impute_rare_common=FALSE= in default, which disables rare variants imputation. To enable it, the users should modify the =nextflow.config= file adding /quilt_extra_args='--impute_rare_common=TRUE'/.
 
 * TODO FUTURE PLANS
 - [ ] build and upload docker and singularity container

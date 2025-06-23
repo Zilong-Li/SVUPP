@@ -1,3 +1,3 @@
 chrom,genetic_map,vcf,vcf_index
-chr22,/home/zilong/Projects/github/QUILT/maps/hg38/CEU-chr22-final.b38.txt.gz,/home/zilong/.tmp/datahub/refpanel/1kgp/CCDG_14151_B01_GRM_WGS_2020-08-05_chr22.filtered.shapeit2-duohmm-phased.vcf.gz,/home/zilong/.tmp/datahub/refpanel/1kgp/CCDG_14151_B01_GRM_WGS_2020-08-05_chr22.filtered.shapeit2-duohmm-phased.vcf.gz.tbi
-chr21,/home/zilong/Projects/github/QUILT/maps/hg38/CEU-chr21-final.b38.txt.gz,/home/zilong/.tmp/datahub/refpanel/1kgp/CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.filtered.shapeit2-duohmm-phased.vcf.gz,/home/zilong/.tmp/datahub/refpanel/1kgp/CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.filtered.shapeit2-duohmm-phased.vcf.gz.tbi
+chr22,tests/CEU-chr22-final.b38.txt.gz,tests/CCDG_14151_B01_GRM_WGS_2020-08-05_chr22.filtered.shapeit2-duohmm-phased.vcf.gz,tests/CCDG_14151_B01_GRM_WGS_2020-08-05_chr22.filtered.shapeit2-duohmm-phased.vcf.gz.tbi
+chr21,tests/CEU-chr21-final.b38.txt.gz,tests/CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.filtered.shapeit2-duohmm-phased.vcf.gz,tests/CCDG_14151_B01_GRM_WGS_2020-08-05_chr21.filtered.shapeit2-duohmm-phased.vcf.gz.tbi

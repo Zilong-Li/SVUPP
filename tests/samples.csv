@@ -1,4 +1,2 @@
-batch,sample,bam,bai,fasta
-1,NA12878,/home/zilong/.tmp/datahub/bams/NA12878.1.0X.bam,/home/zilong/.tmp/datahub/bams/NA12878.1.0X.bam.csi,/home/zilong/.tmp/datahub/reference/human_GRCh38_no_alt_analysis_set.fasta
-1,NA12877,/home/zilong/.tmp/datahub/bams/NA12877.1.0X.bam,/home/zilong/.tmp/datahub/bams/NA12877.1.0X.bam.csi,/home/zilong/.tmp/datahub/reference/human_GRCh38_no_alt_analysis_set.fasta
-
+batch,sample,bam,bai,fasta,fai
+batch1,NA12878,tests/NA12878.hg38.cram,tests/NA12878.hg38.cram.crai,tests/1KG_ONT_VIENNA_hg38.fa,tests/1KG_ONT_VIENNA_hg38.fa.fai
