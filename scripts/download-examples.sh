@@ -23,5 +23,5 @@ for chr in chr{21..22};do
 done
 
 echo "download SVlist"
-wget -N -r --no-parent --no-directories --directory-prefix=$outdir https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1KG_ONT_VIENNA/release/v1.1/graph-augmentation/SVarp-hg38_biallelic_truvari_filtered.vcf.gz
-wget -N -r --no-parent --no-directories --directory-prefix=$outdir https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1KG_ONT_VIENNA/release/v1.1/graph-augmentation/SVarp-hg38_biallelic_truvari_filtered.vcf.gz.tbi
+wget -N -r --no-parent --no-directories --directory-prefix=$outdir https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1KG_ONT_VIENNA/release/v1.1/graph-augmentation/delins.sniffles.hg38.liftedT2T.13Nov2023.nygc.vcf.gz
+wget -N -r --no-parent --no-directories --directory-prefix=$outdir https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1KG_ONT_VIENNA/release/v1.1/graph-augmentation/delins.sniffles.hg38.liftedT2T.13Nov2023.nygc.vcf.gz.tbi
