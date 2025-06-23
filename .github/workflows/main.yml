@@ -40,3 +40,11 @@ jobs:
       - name: Download data
         run: sudo bash ./scripts/download-examples.sh
 
+      - name: Test examples
+        run: |
+          nextflow run main.nf \
+          -profile conda \
+          --refpanel tests/refpanel.csv \
+          --samples tests/samples.csv \
+          --svfile tests/SVarp-hg38_biallelic_truvari_filtered.vcf.gz
+

@@ -32,7 +32,7 @@ workflow CUTESV2_RUN {
 
     ch_input = ch_samples.join(ch_labels, by: 0)
 
-    CUTESV2(ch_input, params.svfile)
+    CUTESV2(ch_input, file(params.svfile))
     ch_vcf      = CUTESV2.out.vcf
     ch_tbi      = CUTESV2.out.tbi
     ch_versions = CUTESV2.out.versions
