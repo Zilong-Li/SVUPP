@@ -178,3 +178,4 @@ cython_debug/
 work
 /results/
 /tests/
+/containers/*.sif

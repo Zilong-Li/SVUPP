@@ -1,0 +1,57 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+%environment
+    export PYENV_ROOT="/root/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PYENV_ROOT/versions/3.10.12/bin:$PATH"
+    
+%post
+    apt-get update
+    apt-get install --assume-yes software-properties-common
+    add-apt-repository universe
+    apt-get update
+    apt-get install --assume-yes build-essential libbz2-dev libcurl4-openssl-dev libssl-dev zlib1g-dev liblzma-dev libdeflate-dev libncurses5-dev curl autoconf git
+    apt-get install --assume-yes make libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+
+    git clone https://github.com/pyenv/pyenv.git /root/.pyenv
+    # set environment for pyenv
+    export PYENV_ROOT="/root/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
+    eval "$(pyenv init -)"
+    
+    pyenv install 3.10.12
+    pyenv global 3.10.12
+    python -m pip install --no-cache-dir numpy==2.1.3 scikit-learn==1.6.1
+
+    mkdir /metadata
+    mkdir /repos
+    cd /repos
+        
+    git clone --branch v0.0.2 https://github.com/Zilong-Li/cuteSV
+    cd cuteSV
+    python setup.py install
+    echo `git rev-parse --short HEAD` > /metadata/cutesv.git.version
+    cd ..
+    
+    apt-get install --assume-yes tabix samtools bcftools
+    apt-get install -y r-base r-cran-devtools
+    
+    git clone https://github.com/rwdavies/QUILT
+    cd QUILT
+    Rscript ./scripts/install-r-dependencies.R
+    Rscript ./scripts/build-and-install.R
+    cp QUILT.R /usr/local/bin 
+    cp QUILT2.R /usr/local/bin 
+    cp QUILT_prepare_reference.R /usr/local/bin 
+    cp QUILT2_prepare_reference.R /usr/local/bin 
+    cp QUILT_HLA.R /usr/local/bin 
+    cp QUILT_HLA_prepare_reference.R /usr/local/bin 
+    echo `git rev-parse --short HEAD` > /metadata/quilt.git.version
+    cd ..
+    
+    apt-get remove --assume-yes git software-properties-common build-essential
+    apt-get autoremove --assume-yes
+    apt-get clean --assume-yes
+
+%environment
+    export LC_ALL=C

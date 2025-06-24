@@ -1,0 +1,23 @@
+#+title: Build Singularity and Docker
+#+author: Zilong Li
+#+language: en
+* Singularity
+** Installation
+
+#+begin_src bash
+# Update and install dependencies
+sudo apt update
+sudo apt install -y software-properties-common
+
+# Add the repository
+sudo add-apt-repository -y ppa:apptainer/ppa
+sudo apt update
+
+# Install Apptainer
+sudo apt install -y apptainer
+#+end_src
+** Build svupp.sif
+
+#+begin_src bash
+sudo singularity build svupp.sif svupp.def
+#+end_src
