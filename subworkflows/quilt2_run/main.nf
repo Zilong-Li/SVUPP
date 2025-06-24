@@ -7,7 +7,7 @@ include { QUILT2_PHASE } from '../../modules/quilt2/phasing/main'
 workflow QUILT2_RUN {
 
     take:
-    samples_csv      // csv file
+    ch_samples_csv   // chnanel: path(csv)
     ch_refdata_csv   // channel: path(csv)
     
     main:
@@ -22,8 +22,7 @@ workflow QUILT2_RUN {
 
     
     // Parse sample sheet
-    ch_samples = Channel
-        .fromPath(samples_csv, checkIfExists: true)
+    ch_samples = ch_samples_csv
         .splitCsv(header: true)
         .map { row -> 
             def batch = [id: row.batch]
@@ -50,26 +49,11 @@ workflow QUILT2_RUN {
     
     QUILT2_PHASE(ch_impute)
     
-    // save the paths in a CSV
-    def outdir = params.outdir ?: 'results'
-    ch_labels = QUILT2_PHASE.out.labels
-        .transpose()
-        .map { meta, tsv ->
-            def bn = tsv.baseName.tokenize('.')
-            [bn[0], tsv]
-        }
-        .map { id, tsv -> "${id},${tsv}" }
-        .collectFile(
-            name: 'samples_read_labels.csv',
-            seed: 'sample,label',
-            newLine: true,
-            storeDir: outdir,
-            sort: false
-        )
+    ch_labels =  QUILT2_PHASE.out.labels
 
     emit:
     vcf      = ch_vcf      // channel: [ val(meta), path(vcf) ]
-    labels   = ch_labels   // channel: [ path(ch_labels) ]
+    labels   = ch_labels   // channel: [ val(meta2), path(labels) ]
     versions = ch_versions // channel: [ path(versions.yml) ]
 
 }

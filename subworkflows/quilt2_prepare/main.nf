@@ -13,8 +13,6 @@ workflow QUILT2_PREPARE_RDATA {
 
     main:
     ch_versions = Channel.empty()
-    def refdata = params.refdata ?: 'prepared_reference_rdata.csv'
-    def outdir = params.outdir ?: 'results'
 
     QUILT2_PREPARE_CHUNK(ch_refpanel)
     
@@ -33,20 +31,11 @@ workflow QUILT2_PREPARE_RDATA {
     ch_input = ch_chunks.combine(ch_vcf, by: 0).map {v -> [v[1], v[0], v[2], v[3], v[4], v[5], v[6]]}
 
     QUILT2_PREPARE_REFERENCE(ch_input, params.buffer, params.nGen)
-    // save the paths in a CSV
-    ch_csv = QUILT2_PREPARE_REFERENCE.out.rdata
-        .map { meta, rdata -> "${meta.id},${rdata}" }
-        .collectFile(
-            name: refdata,
-            seed: 'chunk_id,refpanel_rdata',
-            newLine: true,
-            storeDir: outdir,
-            sort: false
-        )
     ch_versions = QUILT2_PREPARE_REFERENCE.out.versions
+    ch_rdata = QUILT2_PREPARE_REFERENCE.out.rdata
 
     emit:
-    csv      = ch_csv                                    // channel: [ path(prepared_reference_rdata.csv) ]
+    rdata    = ch_rdata                                  // channel: [ meta, path(rdata) ]
     versions = ch_versions                               // channel: [ path(versions.yml) ]
 }
 

@@ -10,12 +10,15 @@
 git clone https://github.com/Zilong-Li/SVUPP
 cd SVUPP
 
+# Download example data from 1KG
+bash ./scripts/download-examples.sh 
+
 # Run after preparing the sample sheet and reference panel
 nextflow run main.nf \
          -profile conda \                 # or docker/singularity
          --refpanel tests/refpanel.csv \  # for phased reference panel
          --samples tests/samples.csv \    # samplesheet with long reads
-         --svfile /path/to/vcf/with/svs   # for SV genotyping
+         --svfile tests/delins.sniffles.hg38.liftedT2T.13Nov2023.nygc.vcf.gz  # for SV genotyping
 
 # Output Structure
 # results
@@ -25,10 +28,10 @@ nextflow run main.nf \
 # │   └── versions.yml
 # ├── prepared_reference_rdata.csv
 # ├── quilt2_impute
-# │   ├── 1            # batch 1
+# │   ├── batch1
 # │   └── versions.yml
 # ├── quilt2_phase
-# │   ├── 1            # batch 1
+# │   ├── batch1
 # │   └── versions.yml
 # ├── quilt2_prepare_chunk
 # │   ├── chr21.csv

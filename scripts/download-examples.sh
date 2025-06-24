@@ -16,7 +16,7 @@ wget -N -r --no-parent --no-directories --directory-prefix=$outdir https://ftp.1
 
 echo "download phased reference panel"
 
-for chr in chr{21..22};do
+for chr in chr21;do
     wget -N -r --no-parent --no-directories --directory-prefix=$outdir https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_phased/CCDG_14151_B01_GRM_WGS_2020-08-05_${chr}.filtered.shapeit2-duohmm-phased.vcf.gz
     wget -N -r --no-parent --no-directories --directory-prefix=$outdir https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_phased/CCDG_14151_B01_GRM_WGS_2020-08-05_${chr}.filtered.shapeit2-duohmm-phased.vcf.gz.tbi
     wget -N -r --no-parent --no-directories --directory-prefix=$outdir https://raw.githubusercontent.com/rwdavies/QUILT/refs/heads/master/maps/hg38/CEU-${chr}-final.b38.txt.gz

@@ -31,17 +31,43 @@ workflow {
             ch_params = Channel.of([params.minbp, params.mincm]) // params for chunking
 
             QUILT2_PREPARE_RDATA(ch_refpanel.combine(ch_params))
-            ch_refdata = QUILT2_PREPARE_RDATA.out.csv
+            // save the paths in a CSV
+            ch_refdata = QUILT2_PREPARE_RDATA.out.rdata
+                .map { meta, rdata -> "${meta.id},${rdata}" }
+                .collectFile(
+                    name: 'prepared_reference_rdata.csv',
+                    seed: 'chunk_id,refpanel_rdata',
+                    newLine: true,
+                    storeDir: params.outdir,
+                    sort: false
+                )
         } else {
             ch_refdata = Channel.fromPath(params.refdata, checkIfExists: true)
         }
 
-        QUILT2_RUN(params.samples, ch_refdata)
-        ch_labels =  QUILT2_RUN.out.labels
+        ch_samples = Channel.fromPath(params.samples, checkIfExists: true)
+        QUILT2_RUN(ch_samples, ch_refdata)
+        // save the paths in a CSV
+        ch_labels = QUILT2_RUN.out.labels
+            .transpose()
+            .map { meta, tsv ->
+                def bn = tsv.baseName.tokenize('.')
+                [bn[0], tsv]
+            }
+            .map { id, tsv -> "${id},${tsv}" }
+            .collectFile(
+                name: 'samples_read_labels.csv',
+                seed: 'sample,label',
+                newLine: true,
+                storeDir: params.outdir,
+                sort: false
+            )
+
     }
     
     def samples = params.samples2 ?: params.samples
-    CUTESV2_RUN(samples, ch_labels)
+    ch_samples = Channel.fromPath(samples, checkIfExists: true)
+    CUTESV2_RUN(ch_samples, ch_labels)
 
 }
 

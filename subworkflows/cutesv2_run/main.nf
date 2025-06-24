@@ -6,14 +6,13 @@ include { CUTESV2 } from '../../modules/cuteSV2/force_calling/main'
 workflow CUTESV2_RUN {
 
     take:
-    samples_csv      // csv file
+    ch_samples_csv   // chnanel: path(csv)
     ch_labels_csv    // channel: path(csv)
     
     main:
 
     // Parse sample sheet
-    ch_samples = Channel
-        .fromPath(samples_csv, checkIfExists: true)
+    ch_samples = ch_samples_csv
         .splitCsv(header: true)
         .map { row -> 
             def bam = file(row.bam, checkIfExists: true)
