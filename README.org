@@ -2,7 +2,6 @@
 #+author: Zilong Li
 #+language: en
 
-
 * Quick Start
 
 #+begin_src shell
@@ -45,8 +44,32 @@ nextflow run main.nf \
 # Read the nextflow.config about advanced and Customization parameters
 #+end_src
 
-* Quick Guide to [[https://www.nextflow.io/docs/latest/install.html][Nextflow]]
+* Usage
 
+** Step 0: install Nextflow
+
+Please follow the official [[https://www.nextflow.io/docs/latest/install.html][guideline]] to install the latest Nextflow with DSL2 support.
+
+** Step 1: configure workflow
+
+To configure the parameters of the workflow, modify the =nextflow.config= according to your needs.
+
+In addition, there two main CSV files you need to prepare, i.e. =tests/samples.csv= and =tests/refpanel.csv=. Replace the values in these spreadsheets with your own data.
+
+** Step 2: run workflow
+
+You can clone this workflow to a customized path, and then run
+
+#+begin_src shell
+cd SVUPP
+nextflow run main.nf \
+         -profile conda \                 # or docker/singularity
+         --refpanel tests/refpanel.csv \  # for phased reference panel
+         --samples tests/samples.csv \    # samplesheet with long reads
+         --svfile tests/delins.sniffles.hg38.liftedT2T.13Nov2023.nygc.vcf.gz  # for SV genotyping
+#+end_src
+
+If you are new to Nextflow, here is a quick guide to it.
 
 | Functionality                | Nextflow Command   | Important Note                          |
 |------------------------------+--------------------+-----------------------------------------|

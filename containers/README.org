@@ -19,5 +19,5 @@ sudo apt install -y apptainer
 ** Build svupp.sif
 
 #+begin_src bash
-sudo singularity build svupp.sif svupp.def
+singularity build svupp.sif svupp.def
 #+end_src

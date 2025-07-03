@@ -2,8 +2,10 @@ Bootstrap: docker
 From: ubuntu:24.04
 
 %environment
-    export PYENV_ROOT="/root/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PYENV_ROOT/versions/3.10.12/bin:$PATH"
+    export LC_ALL=C
+    export PYENV_ROOT="/opt/pyenv"
+    export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
+    eval "$(pyenv init - --no-rehash)"
     
 %post
     apt-get update
@@ -12,13 +14,13 @@ From: ubuntu:24.04
     apt-get update
     apt-get install --assume-yes build-essential libbz2-dev libcurl4-openssl-dev libssl-dev zlib1g-dev liblzma-dev libdeflate-dev libncurses5-dev curl autoconf git
     apt-get install --assume-yes make libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
-
-    git clone https://github.com/pyenv/pyenv.git /root/.pyenv
-    # set environment for pyenv
-    export PYENV_ROOT="/root/.pyenv"
+    
+    # Install pyenv
+    git clone https://github.com/pyenv/pyenv.git /opt/pyenv
+    export PYENV_ROOT="/opt/pyenv"
     export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
     eval "$(pyenv init -)"
-    
+
     pyenv install 3.10.12
     pyenv global 3.10.12
     python -m pip install --no-cache-dir numpy==2.1.3 scikit-learn==1.6.1
@@ -30,6 +32,7 @@ From: ubuntu:24.04
     git clone --branch v0.0.2 https://github.com/Zilong-Li/cuteSV
     cd cuteSV
     python setup.py install
+    ln -s /opt/pyenv/versions/3.10.12/bin/cuteSV /usr/local/bin/
     echo `git rev-parse --short HEAD` > /metadata/cutesv.git.version
     cd ..
     
@@ -53,5 +56,6 @@ From: ubuntu:24.04
     apt-get autoremove --assume-yes
     apt-get clean --assume-yes
 
-%environment
-    export LC_ALL=C
+%labels
+    Author Zilong Li
+    Version 1.0.0
