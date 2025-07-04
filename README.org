@@ -56,7 +56,11 @@ Please follow the official [[https://www.nextflow.io/docs/latest/install.html][g
 To configure the parameters of the workflow, modify the =nextflow.config= according to your needs.
 In addition, there two main CSV files you need to prepare, i.e. =tests/samples.csv= and =tests/refpanel.csv=. Check out the [[file:tests/README.org][README]].
 
-** Step 2: run workflow
+** Step 2: choose a container
+
+SVUPP supports Docker, Singularity and Conda containers technology. Therefore, you can choose to use one of the 3 profiles in the =nextflow.config= namely *'docker','singularity' and 'conda'*. *NB*, if you choose to use either Singularity or Docker, you need to set the =params.container= to the local image name. If you use coda profile, you should activate conda first before running SVUPP. Also, if conda was chosen, it may take a while to resolve the conda environment for the first time depending on the conda version and internet connection.
+
+** Step 3: run workflow
 
 You can clone this workflow to a customized path, and then run
 
@@ -71,13 +75,13 @@ nextflow run main.nf \
 
 If you are new to Nextflow, here is a quick guide to it.
 
-| Functionality                | Nextflow Command   | Important Note                          |
-|------------------------------+--------------------+-----------------------------------------|
-| Run job in the background    | run -bg            | DO NOT use nohup or &                   |
-| Resume from the cached tasks | run -resume        | Can combine with specific hash          |
-| Cache directory              | run -w/-work-dir   | Defaults 'work'                         |
-| Output directory             | run -o/-output-dir | Precede the configuration file          |
-| Logging history              | log                | Find the status/identifier of past runs |
+| Functionality                | Nextflow Command | Important Note                          |
+|------------------------------+------------------+-----------------------------------------|
+| Run job in the background    | run -bg          | DO NOT use nohup or &                   |
+| Resume from the cached tasks | run -resume      | Can combine with specific hash          |
+| Cache directory              | run -w           | Defaults 'work'                         |
+| Output directory             | run -o           | Defaults 'results'                      |
+| Logging history              | log              | Find the status/identifier of past runs |
 
 * Q&A
 
@@ -126,6 +130,6 @@ The label column stores the path to a space-separated file with no header and th
 
 ** Speedup QUILT2 for large reference panel
 
-QUILT2 can run much faster if only imputing common variants in a large reference panel where the major SNPs are rare. With that in mind, SVUPP  runs QUILT2 with =--impute_rare_common=FALSE= in default, which disables rare variants imputation. To enable it, the users should modify the =nextflow.config= file adding /quilt_extra_args='--impute_rare_common=TRUE'/.
+QUILT2 can run much faster if only imputing common variants in a large reference panel where the major SNPs are rare. With that in mind, SVUPP  runs QUILT2 with =--impute_rare_common=FALSE= in default, which disables rare variants imputation. To enable it, the users should modify the =nextflow.config= file to set =quilt_extra_args= to ='--impute_rare_common=TRUE'=.
 
 
