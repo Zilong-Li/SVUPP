@@ -1,6 +1,14 @@
 #+title: Build Singularity and Docker
 #+author: Zilong Li
 #+language: en
+* Docker
+
+Follow the [[https://docs.docker.com/engine/install/ubuntu/][official website]] to install docker. Then, build the docker image for =svupp= by
+
+#+begin_src shell
+docker build -t svupp .
+#+end_src
+
 * Singularity
 ** Installation
 
@@ -21,3 +29,4 @@ sudo apt install -y apptainer
 #+begin_src bash
 singularity build svupp.sif svupp.def
 #+end_src
+

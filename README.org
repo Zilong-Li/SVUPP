@@ -1,6 +1,7 @@
 #+title: SVUPP: Structural Variants Genotyping Using Pre-Phased Reads
-#+author: Zilong Li
-#+language: en
+#+author: Zilong Li 
+#+email: zilong.dk@gmail.com
+#+options: toc:2 num:nil email:t -:nil ^:nil ':nil
 
 * Quick Start
 
@@ -53,8 +54,7 @@ Please follow the official [[https://www.nextflow.io/docs/latest/install.html][g
 ** Step 1: configure workflow
 
 To configure the parameters of the workflow, modify the =nextflow.config= according to your needs.
-
-In addition, there two main CSV files you need to prepare, i.e. =tests/samples.csv= and =tests/refpanel.csv=. Replace the values in these spreadsheets with your own data.
+In addition, there two main CSV files you need to prepare, i.e. =tests/samples.csv= and =tests/refpanel.csv=. Check out the [[file:tests/README.org][README]].
 
 ** Step 2: run workflow
 
@@ -128,7 +128,4 @@ The label column stores the path to a space-separated file with no header and th
 
 QUILT2 can run much faster if only imputing common variants in a large reference panel where the major SNPs are rare. With that in mind, SVUPP  runs QUILT2 with =--impute_rare_common=FALSE= in default, which disables rare variants imputation. To enable it, the users should modify the =nextflow.config= file adding /quilt_extra_args='--impute_rare_common=TRUE'/.
 
-* TODO FUTURE PLANS
-- [ ] build and upload docker and singularity container
-- [ ] Evaluation
 
