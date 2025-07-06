@@ -45,6 +45,21 @@ nextflow run main.nf \
 # Read the nextflow.config about advanced and Customization parameters
 #+end_src
 
+* Table of Contents :toc:quote:noexport:
+#+BEGIN_QUOTE
+- [[#quick-start][Quick Start]]
+- [[#usage][Usage]]
+  - [[#step-0-install-nextflow][Step 0: install Nextflow]]
+  - [[#step-1-configure-workflow][Step 1: configure workflow]]
+  - [[#step-2-choose-a-container][Step 2: choose a container]]
+  - [[#step-3-run-workflow][Step 3: run workflow]]
+- [[#output][Output]]
+- [[#qa][Q&A]]
+  - [[#what-if-i-already-have-the-prepared-reference-panel-ie-the-rdata-from-quilt][What if I already have the prepared reference panel, i.e the RData, from QUILT?]]
+  - [[#what-if-i-already-have-read-labels-either-from-quilt-or-other-read-phasing-program-][What if I already have read labels either from QUILT or other read phasing program ?]]
+  - [[#speedup-quilt2-for-a-large-reference-panel][Speedup QUILT2 for a large reference panel]]
+#+END_QUOTE
+
 * Usage
 
 ** Step 0: install Nextflow
@@ -57,7 +72,7 @@ To configure the parameters of the workflow, modify the =nextflow.config= or use
 
 ** Step 2: choose a container
 
-SVUPP supports /Docker/, /Singularity/ and /Conda/ containers technology. Therefore, you can choose to use one of the 3 profiles in the =nextflow.config= namely *'docker','singularity' and 'conda'*. *NB*, if you choose to use either /singularity/ or /docker/ profile, you have to set the =params.container= to the local image name. If you use conda profile, you should activate a conda (base) environment first before running SVUPP. Also, if conda is chosen, it may take a while to resolve the conda environment for the first time depending on the conda version and internet connection.
+SVUPP supports /Docker/, /Singularity/ and /Conda/ containers technology. Therefore, you can choose to use one of the 3 profiles in the =nextflow.config= namely /docker/, /singularity/ and /conda/. *NB*, if you choose to use either /singularity/ or /docker/ profile, you have to set the =params.container= to the local image name. If you use conda profile, you should activate a conda (e.g. base) environment first before running SVUPP. Also, if conda is chosen, it may take a while to resolve the environment for the first time depending on the conda version and internet connection.
 
 ** Step 3: run workflow
 
@@ -84,9 +99,9 @@ If you are new to Nextflow, here is a quick guide to it.
 
 * Output
 
-All output files are saved in the folder that you specified when running Nextflow command with defaults to *results*. Here is the details:
+All output files are saved in the folder that you specified when running Nextflow command with defaults to *results*. Here are the details:
 
-| Genotyped VCF:      | results/cuteSV2/id.vcf.gz            |
+| Genotyped VCF:      | results/cuteSV2/$sampleid.vcf.gz     |
 | Read labels:        | results/samples_read_labels.csv      |
 | Prepared reference: | results/prepared_reference_rdata.csv |
 
