@@ -3,6 +3,18 @@
 #+email: zilong.dk@gmail.com
 #+options: toc:2 num:nil email:t -:nil ^:nil
 
+Paper will be online soon. Feel free to cite SVUPP using the following BibTex template:
+
+#+begin_src bibtex
+@misc{SVUPP,
+   author = {Zilong Li, Frederik Filip Stæger, Robert W. Davies, Ida Moltke, Anders Albrechtsen},
+   journal = {TBD},
+   year = {2025},
+   note = {https://github.com/Zilong-Li/SVUPP},
+   title = {Pre-phasing long reads improves structural variant genotyping}
+}
+#+end_src
+
 * Quick Start
 
 #+begin_src shell
