@@ -3,7 +3,8 @@
 #+email: zilong.dk@gmail.com
 #+options: toc:2 num:nil email:t -:nil ^:nil
 
-https://zenodo.org/badge/DOI/10.5281/zenodo.17227287.svg
+[[https://github.com/Zilong-Li/SVUPP/actions/workflows/main.yml/badge.svg]]
+[[https://zenodo.org/badge/DOI/10.5281/zenodo.17227287.svg]]
 
 Please cite our [[https://doi.org/10.1093/bioinformatics/btaf587][paper]] with the following BibTex template:
 
@@ -18,7 +19,6 @@ Please cite our [[https://doi.org/10.1093/bioinformatics/btaf587][paper]] with t
   issn = {1367-4811},
   doi = {10.1093/bioinformatics/btaf587}
 }
-
 #+end_src
 
 * Quick Start
@@ -66,11 +66,12 @@ nextflow run main.nf \
 * Table of Contents :toc:quote:noexport:
 #+BEGIN_QUOTE
 - [[#quick-start][Quick Start]]
+- [[#introduction][Introduction]]
 - [[#usage][Usage]]
   - [[#step-0-install-nextflow][Step 0: install Nextflow]]
-  - [[#step-1-configure-workflow][Step 1: configure workflow]]
+  - [[#step-1-configure-the-workflow][Step 1: configure the workflow]]
   - [[#step-2-choose-a-container][Step 2: choose a container]]
-  - [[#step-3-run-workflow][Step 3: run workflow]]
+  - [[#step-3-run-the-workflow][Step 3: run the workflow]]
 - [[#output][Output]]
 - [[#qa][Q&A]]
   - [[#what-if-i-already-have-the-prepared-reference-panel-ie-the-rdata-from-quilt][What if I already have the prepared reference panel, i.e the RData, from QUILT?]]
@@ -80,13 +81,21 @@ nextflow run main.nf \
   - [[#will-this-pipeline-support-whatshap][Will this pipeline support WhatsHap?]]
 #+END_QUOTE
 
+* Introduction
+
+SVUPP is a pipeline that improves SVs genotyping accuracy by incorporating read phasing information into genotype likelihoods. Currently, we first used [[https://github.com/rwdavies/QUILT][QUILT2]] to phase long reads with a SNP reference panel. Then, we used a forked version of [[https://github.com/Zilong-Li/cuteSV/tree/v0.0.2][cuteSV2]] to assign SV signals to each read followed by a genotyping module that incorporates the haplotype probability of reads.
+
+$$
+\text{P}(X\vert H=(H_1,H_2)) \propto \prod_{r=1}^{D} \sum_{h\in\{1,2\}} \text{P}(X_r\vert H_h) \text{P}(\text{hap}_r=h)
+$$
+
 * Usage
 
 ** Step 0: install Nextflow
 
 Please follow the official [[https://www.nextflow.io/docs/latest/install.html][guideline]] to install the latest Nextflow with DSL2 support.
 
-** Step 1: configure workflow
+** Step 1: configure the workflow
 
 To configure the parameters of the workflow, modify the =nextflow.config= or use Nextflow command options (for Nextflow experts). In addition, there are two main CSV files you need to prepare, e.g. =tests/samples.csv= and =tests/refpanel.csv=. Check out the [[file:tests/README.org][README]].
 
@@ -94,7 +103,7 @@ To configure the parameters of the workflow, modify the =nextflow.config= or use
 
 SVUPP supports /Docker/, /Singularity/ and /Conda/ containers technology. Therefore, you can choose to use one of the 3 profiles in the =nextflow.config= namely /docker/, /singularity/ and /conda/. *NB*, if you use either /singularity/ or /docker/ profile, you have to set the =params.container= to the local image path. If you use conda profile, you should activate a conda environment (e.g. the base) first before running SVUPP. Also, it may take a while for conda to resolve the environment for the first time depending on the conda version and internet connection.
 
-** Step 3: run workflow
+** Step 3: run the workflow
 
 You can clone this workflow to a customized path, and then run
 
@@ -104,7 +113,7 @@ nextflow run main.nf \
          -profile conda \                 # or docker/singularity
          --refpanel tests/refpanel.csv \  # for phased reference panel
          --samples tests/samples.csv \    # samplesheet with long reads
-         --svfile tests/delins.sniffles.hg38.liftedT2T.13Nov2023.nygc.vcf.gz  # for SV genotyping
+         --svfile tests/delins.sniffles.hg38.liftedT2T.13Nov2023.nygc.vcf.gz  # a list of known SVs
 #+end_src
 
 If you are new to Nextflow, here is a quick guide to it.
