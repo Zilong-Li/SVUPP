@@ -3,16 +3,22 @@
 #+email: zilong.dk@gmail.com
 #+options: toc:2 num:nil email:t -:nil ^:nil
 
-Paper will be online soon. Feel free to cite SVUPP using the following BibTex template:
+https://zenodo.org/badge/DOI/10.5281/zenodo.17227287.svg
+
+Please cite our [[https://doi.org/10.1093/bioinformatics/btaf587][paper]] with the following BibTex template:
 
 #+begin_src bibtex
-@misc{SVUPP,
-   author = {Zilong Li, Frederik Filip Stæger, Robert W. Davies, Ida Moltke, Anders Albrechtsen},
-   journal = {Bioinformatics},
-   year = {2025},
-   note = {https://github.com/Zilong-Li/SVUPP},
-   title = {Pre-phasing long reads improves structural variant genotyping}
+@article{li2025SVUPP,
+  title = {Pre-Phasing Long Reads Improves Structural Variant Genotyping},
+  author = {Li, Zilong and St{\ae}ger, Frederik Filip and Davies, Robert W and Moltke, Ida and Albrechtsen, Anders},
+  year = {2025},
+  month = oct,
+  journal = {Bioinformatics},
+  pages = {btaf587},
+  issn = {1367-4811},
+  doi = {10.1093/bioinformatics/btaf587}
 }
+
 #+end_src
 
 * Quick Start
@@ -68,8 +74,10 @@ nextflow run main.nf \
 - [[#output][Output]]
 - [[#qa][Q&A]]
   - [[#what-if-i-already-have-the-prepared-reference-panel-ie-the-rdata-from-quilt][What if I already have the prepared reference panel, i.e the RData, from QUILT?]]
-  - [[#what-if-i-already-have-read-labels-either-from-quilt-or-other-read-phasing-program-][What if I already have read labels either from QUILT or other read phasing program ?]]
   - [[#speedup-quilt2-for-a-large-reference-panel][Speedup QUILT2 for a large reference panel]]
+  - [[#what-if-i-already-have-read-labels-either-from-quilt-or-other-read-phasing-program][What if I already have read labels either from QUILT or other read phasing program?]]
+  - [[#whats-the-advantages-of-quilt2-vs-whatshap][What's the advantages of QUILT2 vs WhatsHap?]]
+  - [[#will-this-pipeline-support-whatshap][Will this pipeline support WhatsHap?]]
 #+END_QUOTE
 
 * Usage
@@ -80,11 +88,11 @@ Please follow the official [[https://www.nextflow.io/docs/latest/install.html][g
 
 ** Step 1: configure workflow
 
-To configure the parameters of the workflow, modify the =nextflow.config= or use Nextflow command options if you are an expert. In addition, there are two main CSV files you need to prepare, e.g. =tests/samples.csv= and =tests/refpanel.csv=. Check out the [[file:tests/README.org][README]].
+To configure the parameters of the workflow, modify the =nextflow.config= or use Nextflow command options (for Nextflow experts). In addition, there are two main CSV files you need to prepare, e.g. =tests/samples.csv= and =tests/refpanel.csv=. Check out the [[file:tests/README.org][README]].
 
 ** Step 2: choose a container
 
-SVUPP supports /Docker/, /Singularity/ and /Conda/ containers technology. Therefore, you can choose to use one of the 3 profiles in the =nextflow.config= namely /docker/, /singularity/ and /conda/. *NB*, if you choose to use either /singularity/ or /docker/ profile, you have to set the =params.container= to the local image name. If you use conda profile, you should activate a conda (e.g. base) environment first before running SVUPP. Also, if conda is chosen, it may take a while to resolve the environment for the first time depending on the conda version and internet connection.
+SVUPP supports /Docker/, /Singularity/ and /Conda/ containers technology. Therefore, you can choose to use one of the 3 profiles in the =nextflow.config= namely /docker/, /singularity/ and /conda/. *NB*, if you use either /singularity/ or /docker/ profile, you have to set the =params.container= to the local image path. If you use conda profile, you should activate a conda environment (e.g. the base) first before running SVUPP. Also, it may take a while for conda to resolve the environment for the first time depending on the conda version and internet connection.
 
 ** Step 3: run workflow
 
@@ -104,7 +112,7 @@ If you are new to Nextflow, here is a quick guide to it.
 | Functionality                | Nextflow Command | Important Note                          |
 |------------------------------+------------------+-----------------------------------------|
 | Run job in the background    | run -bg          | DO NOT use nohup or &                   |
-| Resume from the cached tasks | run -resume      | Can combine with specific hash          |
+| Resume from the cached tasks | run -resume      | Can work with specific hash             |
 | Cache directory              | run -w dir       | Defaults 'work'                         |
 | Output directory             | run -o dir       | Defaults 'results'                      |
 | Logging history              | log              | Find the status/identifier of past runs |
@@ -138,7 +146,11 @@ nextflow run main.nf \
          --svfile /path/to/vcf/with/svs   # for SV genotyping
 #+end_src
 
-** What if I already have read labels either from QUILT or other read phasing program ?
+** Speedup QUILT2 for a large reference panel
+
+QUILT2 can run much faster if only imputing common variants in a large reference panel where the major SNPs are rare. With that in mind, SVUPP  runs QUILT2 with =--impute_rare_common=FALSE= in default, which disables rare variants imputation. To enable it, you should modify the =nextflow.config= file to set =quilt_extra_args= to ='--impute_rare_common=TRUE'=.
+
+** What if I already have read labels either from QUILT or other read phasing program?
 
 1. Prepare a sheet with two columns named 'sample' and 'label', e.g.
    #+begin_src shell
@@ -146,13 +158,10 @@ sample,label
 NA12877,/home/zilong/Projects/SVUPP/work/6c/f6daadafa1fdf4e90c6c8de4c39181/1/NA12877.haptag.tsv
 NA12878,/home/zilong/Projects/SVUPP/work/6c/f6daadafa1fdf4e90c6c8de4c39181/1/NA12878.haptag.tsv
 #+end_src
-
 The label column stores the path to a space-separated file with no header and the first three columns being =qname,phasing_prob,hap=, for example:
-
 | A00217:76:HFLT3DSXX:4:1457:26015:15984 |             0.999 | 1 |
 | A00296:43:HCLHLDSXX:2:2502:19642:31219 |             0.999 | 2 |
 | A00217:76:HFLT3DSXX:1:1336:4616:23359  | 0.500025147658519 | 1 |
-
 2. Run the nextflow
    #+begin_src shell
    nextflow run main.nf \
@@ -162,8 +171,14 @@ The label column stores the path to a space-separated file with no header and th
      --svfile /path/to/vcf/with/svs   # for SV genotyping
 #+end_src
 
-** Speedup QUILT2 for a large reference panel
+** What's the advantages of QUILT2 vs WhatsHap?
 
-QUILT2 can run much faster if only imputing common variants in a large reference panel where the major SNPs are rare. With that in mind, SVUPP  runs QUILT2 with =--impute_rare_common=FALSE= in default, which disables rare variants imputation. To enable it, you should modify the =nextflow.config= file to set =quilt_extra_args= to ='--impute_rare_common=TRUE'=.
+There two main reasons why [[https://github.com/rwdavies/QUILT][QUILT2]] is chosen.
+- QUILT2 is better than the alternatives at low-to-medium coverage (<10x) reads phasing.
+- Users only need to have the aligned long reads of target samples and a public available SNP reference panel, which are easy to obtain.
 
+However, for some non-human projects, where a public reference panel is rarely available, WhatHap may be a good alternative. However, users need high-quality phased genotypes of SNPs, which are normally generated with high-coverage short reads data of target samples.
+  
+** Will this pipeline support WhatsHap?
 
+There is no such promise. However, since we are doing an open-source project, we are very much welcoming PRs!
