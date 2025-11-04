@@ -44,8 +44,6 @@ process QUILT2_IMPUTE {
         --reference='${fasta[0]}' \\
         --use_mspbwt=TRUE \\
         --impute_rare_common=FALSE \\
-        --Ksubset=600 \\
-        --Knew=600 \\
         --chr=$chr \\
         --regionStart=$start \\
         --regionEnd=$end \\
