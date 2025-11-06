@@ -138,7 +138,7 @@ All output files are saved in the folder that you specified when running Nextflo
 
 * Evaluation
 
-For benchmarking studies, It is important to evaluate the results by stratifying the SV complexity and the call rate, which is controled by the GQ thresholding. You can achieve this easily using the [[https://github.com/Zilong-Li/vcfppR?tab=readme-ov-file#vcfcomp-compare-two-vcf-files-and-report-concordance][vcfppR]] package (version >= 0.8.2).
+For benchmarking studies, It is important to evaluate the results by stratifying the SV complexity and the call rate, which is controled by the GQ thresholding. You can achieve this easily using the latest [[https://github.com/Zilong-Li/vcfppR?tab=readme-ov-file#vcfcomp-compare-two-vcf-files-and-report-concordance][vcfppR]] package (version >= 0.8.2).
 
 #+begin_src R
 library(vcfppR)
