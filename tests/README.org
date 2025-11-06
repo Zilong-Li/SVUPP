@@ -12,6 +12,8 @@ A reference panel means the VCF file with phased genotypes for a group of indivi
 
 The [[file:refpanel.csv]] file shows an example of the spreadsheet for configuring a reference panel, which includes four mandatory columns named ="chrom,genetic_map,vcf,vcf_index"=. Note that both VCF and BCF files are accepted.
 
+You can download the reference panel from the 1000 Genomes Project  https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_phased and download the genetic map from QUILT's website https://github.com/rwdavies/QUILT/tree/master/maps.
+
 * Spreadsheet for read labels 
 
 The [[file:samples_read_labels.csv]] file shows an example of the spreadsheet for configuring the read labels for each sample, which includes two mandatory columns named ="sample,label"=, where label points to a text file that stores the reads /qname,phasing_prob,hap/.
