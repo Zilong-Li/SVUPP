@@ -147,10 +147,9 @@ svuppvcf <- system.file("extdata", "svupp.call.vcf.gz", package="vcfppR")
 truth <- vcftable(svvcf)
 truth$neighbors <-as.integer(sub(".*NumNeighbors=([^;]+).*", "\\1", truth$info))
 truth <- subset(truth, neighbors == 0) ## subset biallelic SVs
-res <- vcfcomp(svuppvcf, truth, stats = "gtgq", region = "chr1")
+res <- vcfcomp(svuppvcf, truth, stats = "gtgq")
 vcfplot(res, col = 2,cex = 2, lwd = 3, type = "l", bty = 'l')
 #+end_src
-
 
 * Q&A
 ** Which reference panel should I use?
@@ -211,4 +210,4 @@ However, for some non-human projects, where a public reference panel is rarely a
   
 ** Will this pipeline support WhatsHap?
 
-There is no such promise. However, since we are doing an open-source project, we are very much welcoming PRs!
+It would be nice to have, time permitting. Welcome PRs!
