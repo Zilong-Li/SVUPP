@@ -99,7 +99,7 @@ Please follow the official [[https://www.nextflow.io/docs/latest/install.html][g
 
 ** Step 1: configure the workflow
 
-To configure the parameters of the workflow, modify the =nextflow.config= or use Nextflow command options (for Nextflow experts). In addition, there are two main CSV files you need to prepare, e.g. =tests/samples.csv= and =tests/refpanel.csv=. Check out the [[file:tests/README.org][README there]].
+There are two main CSV files you need to prepare, e.g. =tests/samples.csv= and =tests/refpanel.csv=. Check out the [[file:tests/README.org][README there]]. In addition, to configure the parameters of the workflow, modify the =nextflow.config= or use Nextflow command options (for Nextflow experts). 
 
 ** Step 2: choose a container
 
@@ -154,25 +154,24 @@ vcfplot(res, col = 2,cex = 2, lwd = 3, type = "l", bty = 'l')
 * Q&A
 ** Which reference panel should I use?
 
-In principle, choose the one with matched ancestry or a large one with multiple admixed populations, e.g., the UK Biobank. However, in our benchmarking with the Platinum data, we found there was no difference in phasing accuracy between using the UK Biobank and the 1000 Genomes Project.
+In principle, choose the one with matched ancestry or a large one with multiple admixed populations, e.g., the UK Biobank. However, in our benchmarking with the Platinum data, we found there was no difference in accuracy between using the UK Biobank and the 1000 Genomes Project. You can download the prepared 1000 Genomes reference panel in RData format for QUILT2 here http://popgen.dk/zilong/datahub/1KGP/quilt2_refpanel_hg38/RData/. See the next section on how to use it directly.
 
 ** What if I already have the prepared reference panel, i.e the RData, from QUILT2?
 
-1. Prepare a sheet with two columns named 'chunk_id' and 'refpanel_rdata', such as:
+1. Prepare a sheet with two columns named 'chunk_id' and 'refpanel_rdata', such as http://popgen.dk/zilong/datahub/1KGP/quilt2_refpanel_hg38/prepared_reference_rdata.csv.
     #+begin_src shell
 chunk_id,refpanel_rdata
 chr22.48718618.55783303,/home/zilong/Projects/SVUPP/work/f2/f9b51191685bdf2fa893e394a834af/RData/QUILT_prepared_reference.chr22.48718618.55783303.RData
 chr22.38068017.44734586,/home/zilong/Projects/SVUPP/work/9b/6e3c921ecb41b2ebe01c8f0d4935ab/RData/QUILT_prepared_reference.chr22.38068017.44734586.RData
 chr22.30094765.34092463,/home/zilong/Projects/SVUPP/work/89/b4676a75daf1e493c82e90d8bf1bdd/RData/QUILT_prepared_reference.chr22.30094765.34092463.RData
-chr22.18150679.22149505,/home/zilong/Projects/SVUPP/work/8d/e642c4d7d2c6f1ed3c65c3869088d3/RData/QUILT_prepared_reference.chr22.18150679.22149505.RData
 #+end_src
 2. Run the nextflow
    #+begin_src shell
 nextflow run main.nf \
-         -profile conda \                 # or docker/singularity
+         -profile conda \    # or docker/singularity
          --refdata prepared_reference_rdata.csv \  # the sheet with prepared RData for reference panel
-         --samples tests/samples.csv \    # samplesheet with long reads
-         --svfile /path/to/vcf/with/svs   # for SV genotyping
+         --samples tests/samples.csv \       # samplesheet with long reads
+         --svfile /path/to/vcf/with/sv.vcf   # for SV genotyping
 #+end_src
 ** Speedup QUILT2 for a large reference panel
 

@@ -14,6 +14,8 @@ The [[file:refpanel.csv]] file shows an example of the spreadsheet for configuri
 
 You can download the reference panel from the 1000 Genomes Project  https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/20201028_3202_phased and download the genetic map from QUILT's website https://github.com/rwdavies/QUILT/tree/master/maps.
 
+Alternatively, you can directly download the prepared 1000 Genomes reference panel in RData format for QUILT2 here http://popgen.dk/zilong/datahub/1KGP/quilt2_refpanel_hg38/RData/ along with a spreadsheet such as http://popgen.dk/zilong/datahub/1KGP/quilt2_refpanel_hg38/prepared_reference_rdata.csv.
+
 * Spreadsheet for read labels 
 
 The [[file:samples_read_labels.csv]] file shows an example of the spreadsheet for configuring the read labels for each sample, which includes two mandatory columns named ="sample,label"=, where label points to a text file that stores the reads /qname,phasing_prob,hap/.
