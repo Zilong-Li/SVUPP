@@ -86,7 +86,7 @@ nextflow run main.nf \
 
 * Introduction
 
-SVUPP is a pipeline that improves SVs genotyping accuracy by incorporating read phasing information into genotype likelihoods. Currently, we first used [[https://github.com/rwdavies/QUILT][QUILT2]] to phase long reads with a SNP reference panel. Then, we used a forked version of [[https://github.com/Zilong-Li/cuteSV/tree/v0.0.2][cuteSV2]] to assign SV signals to each read followed by a genotyping module that incorporates the haplotype probability of reads.
+SVUPP is a pipeline that improves SVs genotyping accuracy by incorporating per-read phasing information into genotype likelihoods. Currently, we first used [[https://github.com/rwdavies/QUILT][QUILT2]] to phase long reads with a SNP reference panel. Then, we used a forked version of [[https://github.com/Zilong-Li/cuteSV/tree/v0.0.2][cuteSV2 (aka cuteFC)]] for assigning SV signals to each read followed by our genotyping formula that incorporates the haplotype probability of reads.
 
 $$
 \text{P}(X\vert H=(H_1,H_2)) \propto \prod_{r=1}^{D} \sum_{h\in\{1,2\}} \text{P}(X_r\vert H_h) \text{P}(\text{hap}_r=h)
@@ -107,26 +107,26 @@ SVUPP supports /Docker/, /Singularity/ and /Conda/ containers technology. Theref
 
 ** Step 3: run the workflow
 
-You can clone this workflow to a customized path, and then run
+You can =git clone= this workflow to a customized path, and run without =cd into SVUPP=
 
 #+begin_src shell
-cd SVUPP
-nextflow run main.nf \
+nextflow run SVUPP/main.nf \
          -profile conda \                 # or docker/singularity
-         --refpanel tests/refpanel.csv \  # for phased reference panel
-         --samples tests/samples.csv \    # samplesheet with long reads
-         --svfile tests/delins.sniffles.hg38.liftedT2T.13Nov2023.nygc.vcf.gz  # a list of known SVs
+         --refpanel SVUPP/tests/refpanel.csv \  # for phased reference panel
+         --samples SVUPP/tests/samples.csv \    # samplesheet with long reads
+         --svfile SVUPP/tests/delins.sniffles.hg38.liftedT2T.13Nov2023.nygc.vcf.gz  # a list of known SVs
 #+end_src
 
 If you are new to Nextflow, here is a quick guide.
 
-| Functionality                | Nextflow Command | Important Note                          |
-|------------------------------+------------------+-----------------------------------------|
-| Run job in the background    | run -bg          | DO NOT use nohup or &                   |
-| Resume from the cached tasks | run -resume      | Can work with specific hash             |
-| Cache directory              | run -w dir       | Defaults 'work'                         |
-| Output directory             | run -o dir       | Defaults 'results'                      |
-| Logging history              | log              | Find the status/identifier of past runs |
+| Functionality                | Nextflow Command | Important Note               |
+|------------------------------+------------------+------------------------------|
+| Run job in the background    | run -bg          | DO NOT use nohup or &        |
+| Resume from the cached tasks | run -resume      | Can work with specific hash  |
+| Data cache directory         | run -w dir       | Defaults 'work'              |
+| Output directory             | run --ourdir     | Defaults 'results'           |
+| Max parallel processes       | run -qs          | Defaults None                |
+| Logging history              | log              | Find the status of past runs |
 
 * Output
 
@@ -141,6 +141,7 @@ All output files are saved in the folder that you specified when running Nextflo
 For benchmarking studies, It is important to evaluate the results by stratifying the SV complexity and the call rate, which is controled by the GQ thresholding. You can achieve this easily using the latest [[https://github.com/Zilong-Li/vcfppR?tab=readme-ov-file#vcfcomp-compare-two-vcf-files-and-report-concordance][vcfppR]] package (version >= 0.8.2).
 
 #+begin_src R
+#remotes::install_github("Zilong-Li/vcfppR") ## use the latest github version
 library(vcfppR)
 svvcf <- system.file("extdata", "platinum.sv.vcf.gz", package="vcfppR")
 svuppvcf <- system.file("extdata", "svupp.call.vcf.gz", package="vcfppR")
