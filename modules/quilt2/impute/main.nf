@@ -42,8 +42,6 @@ process QUILT2_IMPUTE {
     QUILT.R \\
         ${list_command}files.txt \\
         --reference='${fasta[0]}' \\
-        --use_mspbwt=TRUE \\
-        --impute_rare_common=FALSE \\
         --chr=$chr \\
         --regionStart=$start \\
         --regionEnd=$end \\
